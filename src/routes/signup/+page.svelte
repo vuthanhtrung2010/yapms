@@ -4,7 +4,7 @@
 	import Card, { Content, Actions } from '@smui/card';
 	import Textfield from '@smui/textfield';
 	import HelperText from '@smui/textfield/helper-text';
-	import { mdiCheckCircle, mdiEmail } from '@mdi/js';
+	import { mdiCheckCircle, mdiEmail, mdiGoogle } from '@mdi/js';
 	import { Icon } from '@smui/common';
 
 	let name = $state('');
@@ -15,6 +15,7 @@
 	let loading = $state(false);
 	let success = $state(false);
 	let successEmail = $state('');
+	let socialLoading = $state(false);
 
 	async function handleSignup(e: SubmitEvent) {
 		e.preventDefault();
@@ -42,6 +43,14 @@
 			email = '';
 			password = '';
 		}
+	}
+
+	async function handleGoogleSignup() {
+		socialLoading = true;
+		await authClient.signIn.social({
+			provider: 'google',
+			callbackURL: '/'
+		});
 	}
 </script>
 
@@ -133,6 +142,22 @@
 							<Label>{loading ? 'Creating account...' : 'Sign Up'}</Label>
 						</Button>
 					</Actions>
+					<div class="divider">
+						<span>or</span>
+					</div>
+
+					<Button
+						onclick={handleGoogleSignup}
+						variant="outlined"
+						disabled={socialLoading}
+						style="width: 100%;"
+						class="google-btn"
+					>
+						<Icon tag="svg" viewBox="0 0 24 24" class="google-icon">
+							<path fill="currentColor" d={mdiGoogle} />
+						</Icon>
+						<Label>{socialLoading ? 'Signing up...' : 'Sign up with Google'}</Label>
+					</Button>
 				</form>
 			{/if}
 		</Content>
@@ -241,5 +266,40 @@
 		justify-content: center;
 		padding: 0 !important;
 		margin-top: 12px;
+	}
+
+	.divider {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin: 8px 0;
+		color: #ccc;
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.divider::before,
+	.divider::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: #ccc;
+	}
+
+	:global(.google-btn.mdc-button) {
+		border-color: var(--mdc-theme-primary, #ff3e00) !important;
+		color: var(--mdc-theme-primary, #ff3e00) !important;
+	}
+
+	:global(.google-btn.mdc-button:hover) {
+		background-color: rgba(255, 62, 0, 0.08) !important;
+		border-color: var(--mdc-theme-primary, #ff3e00) !important;
+	}
+
+	:global(.google-icon) {
+		width: 18px;
+		height: 18px;
+		margin-right: 8px;
 	}
 </style>

@@ -5,7 +5,7 @@
 	import Card, { Content, Actions } from '@smui/card';
 	import Textfield from '@smui/textfield';
 	import HelperText from '@smui/textfield/helper-text';
-	import { mdiAlertCircleOutline, mdiEmail } from '@mdi/js';
+	import { mdiAlertCircleOutline, mdiEmail, mdiGoogle } from '@mdi/js';
 	import { Icon } from '@smui/common';
 
 	let email = $state('');
@@ -15,6 +15,7 @@
 	let emailNotVerified = $state(false);
 	let resendLoading = $state(false);
 	let resendSuccess = $state(false);
+	let socialLoading = $state(false);
 
 	async function handleLogin(e: SubmitEvent) {
 		e.preventDefault();
@@ -59,6 +60,14 @@
 		}
 
 		resendLoading = false;
+	}
+
+	async function handleGoogleSignIn() {
+		socialLoading = true;
+		await authClient.signIn.social({
+			provider: 'google',
+			callbackURL: '/'
+		});
 	}
 </script>
 
@@ -135,6 +144,9 @@
 								<HelperText>Enter your password</HelperText>
 							{/snippet}
 						</Textfield>
+						<div class="forgot-password-link">
+							<a href="/forgot-password">Forgot password?</a>
+						</div>
 					</div>
 
 					{#if error}
@@ -146,6 +158,23 @@
 							<Label>{loading ? 'Signing in...' : 'Sign In'}</Label>
 						</Button>
 					</Actions>
+
+					<div class="divider">
+						<span>or</span>
+					</div>
+
+					<Button
+						onclick={handleGoogleSignIn}
+						variant="outlined"
+						disabled={socialLoading}
+						style="width: 100%;"
+						class="google-btn"
+					>
+						<Icon tag="svg" viewBox="0 0 24 24" class="google-icon">
+							<path fill="currentColor" d={mdiGoogle} />
+						</Icon>
+						<Label>{socialLoading ? 'Signing in...' : 'Sign in with Google'}</Label>
+					</Button>
 				</form>
 			{/if}
 		</Content>
@@ -225,6 +254,22 @@
 		width: 100%;
 	}
 
+	.forgot-password-link {
+		margin-top: 8px;
+		text-align: right;
+	}
+
+	.forgot-password-link a {
+		color: var(--mdc-theme-primary, #6200ee);
+		text-decoration: none;
+		font-size: 0.85rem;
+		font-weight: 500;
+	}
+
+	.forgot-password-link a:hover {
+		text-decoration: underline;
+	}
+
 	.error {
 		color: var(--mdc-theme-error, #b00020);
 		font-size: 0.875rem;
@@ -257,6 +302,41 @@
 	}
 
 	:global(.btn-icon) {
+		width: 18px;
+		height: 18px;
+		margin-right: 8px;
+	}
+
+	.divider {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin: 8px 0;
+		color: #ccc;
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.divider::before,
+	.divider::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: #ccc;
+	}
+
+	:global(.google-btn.mdc-button) {
+		border-color: var(--mdc-theme-primary, #ff3e00) !important;
+		color: var(--mdc-theme-primary, #ff3e00) !important;
+	}
+
+	:global(.google-btn.mdc-button:hover) {
+		background-color: rgba(255, 62, 0, 0.08) !important;
+		border-color: var(--mdc-theme-primary, #ff3e00) !important;
+	}
+
+	:global(.google-icon) {
 		width: 18px;
 		height: 18px;
 		margin-right: 8px;

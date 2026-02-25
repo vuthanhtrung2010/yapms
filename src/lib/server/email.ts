@@ -79,3 +79,49 @@ export function getVerificationEmailHTML(url: string, userName?: string) {
 </html>
 	`.trim();
 }
+
+export function getPasswordResetEmailHTML(url: string, userName?: string) {
+	return `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Reset Your Password</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+      .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+      .header { text-align: center; margin-bottom: 30px; }
+      .button { 
+        display: inline-block; 
+        background-color: #ff3e00; 
+        color: white; 
+        padding: 12px 30px; 
+        text-decoration: none; 
+        border-radius: 6px; 
+        margin: 20px 0;
+      }
+      .footer { color: #888; font-size: 12px; margin-top: 30px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Đặt lại Mật khẩu</h1>
+      </div>
+      <p>Xin chào${userName ? ' ' + userName : ''},</p>
+      <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản YAPMS của bạn. Nhấp vào nút bên dưới để tạo mật khẩu mới:</p>
+      <div style="text-align: center;">
+        <a href="${url}" class="button">Đặt lại Mật khẩu</a>
+      </div>
+      <p>Hoặc sao chép và dán đường link này vào trình duyệt:</p>
+      <p style="word-break: break-all; color: #666;">${url}</p>
+      <p style="margin-top: 30px; color: #888; font-size: 13px;">Liên kết này sẽ hết hạn trong 1 giờ.</p>
+      <div class="footer">
+        <p>Nếu bạn không yêu cầu đặt lại mật khẩu này, vui lòng bỏ qua email này. Mật khẩu của bạn sẽ không thay đổi.</p>
+        <p>&copy; 2026 YAPMS. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>
+	`.trim();
+}

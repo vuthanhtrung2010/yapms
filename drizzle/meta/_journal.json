@@ -15,6 +15,13 @@
       "when": 1772011098196,
       "tag": "0001_marvelous_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772017417573,
+      "tag": "0002_make_username_optional",
+      "breakpoints": true
     }
   ]
 }

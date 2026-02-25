@@ -266,7 +266,21 @@ export const actions: Actions = {
 			if (qInfo.questionType === 'multiple_choice' || qInfo.questionType === 'true_false') {
 				isCorrect = a.answer === correctChoiceByQ.get(a.questionId);
 			} else {
-				isCorrect = (a.answer ?? '').trim().toLowerCase() === qInfo.answer.trim().toLowerCase();
+				const correctText = qInfo.answer.trim();
+				const studentText = (a.answer ?? '').trim();
+				// Extract all numbers from the correct answer
+				const correctNums = correctText.match(/-?\d+(\.\d+)?/g);
+				if (correctNums && correctNums.length === 1) {
+					// Correct answer has exactly one number — extract number from student answer too
+					const studentNums = studentText.match(/-?\d+(\.\d+)?/g);
+					if (studentNums && studentNums.length >= 1) {
+						isCorrect = parseFloat(correctNums[0]!) === parseFloat(studentNums[0]!);
+					} else {
+						isCorrect = studentText.toLowerCase() === correctText.toLowerCase();
+					}
+				} else {
+					isCorrect = studentText.toLowerCase() === correctText.toLowerCase();
+				}
 			}
 			if (isCorrect) score++;
 			await db

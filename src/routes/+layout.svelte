@@ -15,7 +15,8 @@
 		mdiNumeric2Box,
 		mdiNumeric3Box,
 		mdiNumeric4Box,
-		mdiNumeric5Box
+		mdiNumeric5Box,
+		mdiGithub
 	} from '@mdi/js';
 	import TinyGesture from 'tinygesture';
 	import { assets } from '$app/paths';
@@ -152,6 +153,15 @@
 		</Section>
 		<Section align="end" toolbar>
 			<div class="topbar-actions">
+				<IconButton
+					title="Visit GitHub repository"
+					onclick={() => window.open('https://github.com/vuthanhtrung2010/yapms', '_blank')}
+				>
+					<Icon tag="svg" viewBox="0 0 24 24">
+						<path fill="currentColor" d={mdiGithub} />
+					</Icon>
+				</IconButton>
+
 				<div class="menu-anchor">
 					<IconButton
 						onclick={() => themeMenu?.setOpen(true)}
